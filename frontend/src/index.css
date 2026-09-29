@@ -1,1 +1,22 @@
 @import 'tailwindcss';
+
+@theme {
+  --color-wine: #32292f;
+  --color-turquoise: #99e1d9;
+  --color-surface: #42383f;
+  --color-cream: #f7f4f6;
+
+  --font-pixel: 'Press Start 2P', monospace;
+  --font-sans: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  background: var(--color-wine);
+  color: var(--color-cream);
+}
+
+html {
+  font-size: 18px;
+}

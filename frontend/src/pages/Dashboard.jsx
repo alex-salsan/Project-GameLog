@@ -1,119 +1,87 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import api from '../services/api'
 import GameCard from '../components/GameCard/GameCard'
 
 const Dashboard = () => {
   const [games, setGames] = useState([])
-  const [name, setName] = useState('')
-  const [playedAt, setPlayedAt] = useState('')
-  const [rating, setRating] = useState('')
-  const [review, setReview] = useState('')
-  const [editingId, setEditingId] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const navigate = useNavigate()
 
   const fetchGames = async () => {
-    const res = await api.get('/games/')
-    setGames(res.data)
+    try {
+      const res = await api.get('/games/')
+      setGames(res.data)
+      setError('')
+    } catch {
+      setError('No se pudieron cargar tus partidas. Inténtalo de nuevo.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
     fetchGames()
   }, [])
 
-  const resetForm = () => {
-    setName('')
-    setPlayedAt('')
-    setRating('')
-    setReview('')
-    setEditingId(null)
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    const payload = { name, played_at: playedAt, rating, review }
-    if (editingId) {
-      await api.put(`/games/${editingId}/`, payload)
-    } else {
-      await api.post('/games/', payload)
-    }
-    resetForm()
-    fetchGames()
-  }
-
   const handleEdit = (game) => {
-    setEditingId(game.id)
-    setName(game.name)
-    setPlayedAt(game.played_at.slice(0, 16))
-    setRating(game.rating)
-    setReview(game.review || '')
+    navigate(`/dashboard/edit/${game.id}`)
   }
 
   const handleDelete = async (id) => {
-    await api.delete(`/games/${id}/`)
-    if (id === editingId) {
-      resetForm()
+    if (!window.confirm('¿Seguro que quieres borrar esta partida?')) return
+    try {
+      await api.delete(`/games/${id}/`)
+      fetchGames()
+    } catch {
+      setError('No se pudo borrar la partida.')
     }
-    fetchGames()
-  }
-
-  const handleLogout = () => {
-    localStorage.removeItem('access')
-    localStorage.removeItem('refresh')
-    navigate('/login')
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Mis partidas</h1>
-        <button onClick={handleLogout} className="text-gray-400 hover:text-white">
-          Cerrar sesión
-        </button>
+    <main className="mx-auto max-w-7xl p-6 md:p-8">
+      <div className="mb-6">
+        <h1 className="font-pixel text-xl leading-relaxed">Mi biblioteca</h1>
+        <p className="mt-2 text-[#BEB4BB]">
+          Tus partidas, reseñas y puntuaciones en un solo lugar.
+        </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-gray-800 p-4 rounded-lg mb-6 grid gap-3">
-        <input
-          type="text"
-          placeholder="Nombre del juego"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="p-2 rounded bg-gray-700 text-white"
-          required
-        />
-        <input
-          type="datetime-local"
-          value={playedAt}
-          onChange={(e) => setPlayedAt(e.target.value)}
-          className="p-2 rounded bg-gray-700 text-white"
-          required
-        />
-        <input
-          type="number"
-          step="0.1"
-          min="0"
-          max="10"
-          placeholder="Nota (0-10)"
-          value={rating}
-          onChange={(e) => setRating(e.target.value)}
-          className="p-2 rounded bg-gray-700 text-white"
-          required
-        />
-        <textarea
-          placeholder="Reseña (opcional)"
-          value={review}
-          onChange={(e) => setReview(e.target.value)}
-          className="p-2 rounded bg-gray-700 text-white"
-        />
-        <button className="bg-blue-600 p-2 rounded hover:bg-blue-700">
-          {editingId ? 'Guardar cambios' : 'Añadir partida'}
-        </button>
-      </form>
+      {loading && <p className="text-[#BEB4BB]">Cargando partidas…</p>}
 
-      {games.map((game) => (
-        <GameCard key={game.id} game={game} onDelete={handleDelete} onEdit={handleEdit} />
-      ))}
-    </div>
+      {error && (
+        <p className="mb-4 rounded-lg border border-red-400/40 bg-red-400/10 p-3 text-red-200">
+          {error}
+        </p>
+      )}
+
+      {!loading && !error && games.length === 0 && (
+        <div className="rounded-2xl border border-[#594A54] bg-[#3D323A] p-10 text-center">
+          <p className="text-lg font-medium">Aún no has registrado ninguna partida</p>
+          <p className="mt-2 text-[#BEB4BB]">
+            Empieza tu biblioteca añadiendo el primer juego.
+          </p>
+          <Link
+            to="/dashboard/add"
+            className="mt-6 inline-block rounded-lg bg-[#63C7BE] px-5 py-3 font-semibold text-[#241E22] transition hover:bg-[#7AD8D0]"
+          >
+            Añadir la primera
+          </Link>
+        </div>
+      )}
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {games.map((game) => (
+          <GameCard
+            key={game.id}
+            game={game}
+            onDelete={handleDelete}
+            onEdit={handleEdit}
+          />
+        ))}
+      </div>
+    </main>
   )
 }
 
