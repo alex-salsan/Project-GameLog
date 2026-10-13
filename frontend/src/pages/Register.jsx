@@ -1,58 +1,91 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import toast from 'react-hot-toast'
 import api from '../services/api'
+import AuthLayout from '../components/AuthLayout/AuthLayout'
+
+const inputClasses =
+  'w-full rounded-lg border border-[#665560] bg-[#4B3D46] p-3 text-[#F5F1F3] placeholder:text-[#BEB4BB] outline-none focus:border-[#63C7BE] focus:ring-2 focus:ring-[#63C7BE]/30'
 
 const Register = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
+    setLoading(true)
     try {
       await api.post('/register/', { username, password })
+      toast.success('Cuenta creada. Ya puedes iniciar sesión')
       navigate('/login')
-    } catch (err) {
+    } catch {
       setError('No se pudo registrar. Prueba con otro nombre de usuario.')
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900">
-      <form onSubmit={handleSubmit} className="bg-gray-800 p-8 rounded-lg w-80">
-        <h1 className="text-2xl font-bold text-white mb-6">Crear cuenta</h1>
+    <AuthLayout title="Crear cuenta">
+      <form onSubmit={handleSubmit} className="grid gap-4">
+        <div>
+          <label htmlFor="username" className="mb-1 block text-sm text-[#BEB4BB]">
+            Usuario
+          </label>
+          <input
+            id="username"
+            type="text"
+            autoComplete="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className={inputClasses}
+            required
+          />
+        </div>
 
-        <input
-          type="text"
-          placeholder="Usuario"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="w-full p-2 mb-4 rounded bg-gray-700 text-white"
-          required
-        />
+        <div>
+          <label htmlFor="password" className="mb-1 block text-sm text-[#BEB4BB]">
+            Contraseña
+          </label>
+          <input
+            id="password"
+            type="password"
+            autoComplete="new-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={inputClasses}
+            required
+          />
+        </div>
 
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 mb-4 rounded bg-gray-700 text-white"
-          required
-        />
+        {error && (
+          <p
+            role="alert"
+            className="rounded-lg border border-red-400/40 bg-red-400/10 p-3 text-sm text-red-200"
+          >
+            {error}
+          </p>
+        )}
 
-        {error && <p className="text-red-400 mb-4">{error}</p>}
-
-        <button className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
-          Registrarse
+        <button
+          disabled={loading}
+          className="rounded-lg bg-[#63C7BE] p-3 font-semibold text-[#241E22] transition hover:bg-[#7AD8D0] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#99E1D9] focus-visible:ring-offset-2 focus-visible:ring-offset-[#3D323A] disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {loading ? 'Creando cuenta…' : 'Registrarse'}
         </button>
 
-        <p className="text-gray-400 mt-4 text-sm">
-          ¿Ya tienes cuenta? <Link to="/login" className="text-blue-400">Inicia sesión</Link>
+        <p className="text-center text-sm text-[#BEB4BB]">
+          ¿Ya tienes cuenta?{' '}
+          <Link to="/login" className="font-medium text-[#99E1D9] hover:underline">
+            Inicia sesión
+          </Link>
         </p>
       </form>
-    </div>
+    </AuthLayout>
   )
 }
 

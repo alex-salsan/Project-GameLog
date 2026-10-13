@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../services/api'
 import GameCard from '../components/GameCard/GameCard'
+import { AnimatePresence } from 'motion/react'
+import toast from 'react-hot-toast'
 
 const Dashboard = () => {
   const [games, setGames] = useState([])
@@ -33,9 +35,10 @@ const Dashboard = () => {
     if (!window.confirm('¿Seguro que quieres borrar esta partida?')) return
     try {
       await api.delete(`/games/${id}/`)
+      toast.success('Partida borrada')
       fetchGames()
     } catch {
-      setError('No se pudo borrar la partida.')
+      toast.error('No se pudo borrar la partida')
     }
   }
 
@@ -57,7 +60,7 @@ const Dashboard = () => {
       )}
 
       {!loading && !error && games.length === 0 && (
-        <div className="rounded-2xl border border-[#594A54] bg-[#3D323A] p-10 text-center">
+        <div className="rounded-2xl border border-[#594A54] bg-[#3D323A]/80 backdrop-blur-md p-10 text-center">
           <p className="text-lg font-medium">Aún no has registrado ninguna partida</p>
           <p className="mt-2 text-[#BEB4BB]">
             Empieza tu biblioteca añadiendo el primer juego.
@@ -72,14 +75,17 @@ const Dashboard = () => {
       )}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {games.map((game) => (
-          <GameCard
-            key={game.id}
-            game={game}
-            onDelete={handleDelete}
-            onEdit={handleEdit}
-          />
-        ))}
+        <AnimatePresence>
+          {games.map((game, index) => (
+            <GameCard
+              key={game.id}
+              game={game}
+              index={index}
+              onDelete={handleDelete}
+              onEdit={handleEdit}
+            />
+          ))}
+        </AnimatePresence>
       </div>
     </main>
   )

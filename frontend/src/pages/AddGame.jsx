@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import api from '../services/api'
+import toast from 'react-hot-toast'
 
 const inputClasses =
   'p-3 rounded-lg bg-[#4B3D46] text-[#F5F1F3] placeholder:text-[#BEB4BB] border border-[#665560] outline-none focus:border-[#63C7BE] focus:ring-2 focus:ring-[#63C7BE]/30'
@@ -48,8 +49,10 @@ const AddGame = () => {
       } else {
         await api.post('/games/', payload)
       }
+      toast.success(isEditing ? 'Partida actualizada' : 'Partida añadida')
       navigate('/dashboard')
     } catch {
+      toast.error('No se pudo guardar la partida')
       setError('No se pudo guardar la partida. Revisa los datos.')
     } finally {
       setSaving(false)
@@ -69,7 +72,7 @@ const AddGame = () => {
 
       <form
         onSubmit={handleSubmit}
-        className="grid gap-3 rounded-2xl border border-[#594A54] bg-[#3D323A] p-4 shadow-lg"
+        className="grid gap-3 rounded-2xl border border-[#594A54] bg-[#3D323A]/80 backdrop-blur-md p-4 shadow-lg"
       >
         <input
           type="text"

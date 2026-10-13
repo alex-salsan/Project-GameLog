@@ -19,7 +19,7 @@ const Navbar = () => {
     }
 
   return (
-    <header className="border-b border-[#594A54] bg-[#32292F]">
+    <header className="border-b border-[#594A54] bg-[#32292F]/80 backdrop-blur-md">
       <nav className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-4">
         <NavLink
           to="/dashboard"
