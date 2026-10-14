@@ -1,4 +1,5 @@
 import os
+import dj_database_url
 from datetime import timedelta
 from dotenv import load_dotenv
 from pathlib import Path
@@ -11,8 +12,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
-
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 
 INSTALLED_APPS = [
@@ -60,8 +59,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
-import dj_database_url
-
 DATABASES = {
     'default': dj_database_url.config(
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
@@ -94,18 +91,17 @@ USE_I18N = True
 USE_TZ = True
 
 
-STATIC_URL = 'static/'
+ALLOWED_HOSTS = [
+    h.strip()
+    for h in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+    if h.strip()
+]
 
-
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}
-
-CORS_ALLOWED_ORIGINS = os.getenv(
-  'CORS_ALLOWED_ORIGINS', 'http://localhost:5173'
-).split(',')
+CORS_ALLOWED_ORIGINS = [
+    o.strip()
+    for o in os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:5173').split(',')
+    if o.strip()
+]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

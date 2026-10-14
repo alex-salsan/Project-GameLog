@@ -15,7 +15,7 @@ const AuthLayout = ({ title, children }) => {
           GAME LOG
         </p>
 
-        <div className="rounded-2xl border border-[#594A54] bg-[#3D323A]/80 p-6 shadow-lg backdrop-blur-md sm:p-8">
+        <div className="border-2 border-[#63C7BE] bg-[#3D323A]/80 p-6 shadow-[6px_6px_0_0_#63C7BE] backdrop-blur-md sm:p-8">
           <h1 className="mb-6 font-pixel text-[16px] leading-relaxed">{title}</h1>
           {children}
         </div>

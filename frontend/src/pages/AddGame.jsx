@@ -2,9 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import api from '../services/api'
 import toast from 'react-hot-toast'
-
-const inputClasses =
-  'p-3 rounded-lg bg-[#4B3D46] text-[#F5F1F3] placeholder:text-[#BEB4BB] border border-[#665560] outline-none focus:border-[#63C7BE] focus:ring-2 focus:ring-[#63C7BE]/30'
+import { inputClasses, primaryButtonClasses, errorClasses } from '../styles/ui'
 
 const AddGame = () => {
   const { id } = useParams()
@@ -72,7 +70,7 @@ const AddGame = () => {
 
       <form
         onSubmit={handleSubmit}
-        className="grid gap-3 rounded-2xl border border-[#594A54] bg-[#3D323A]/80 backdrop-blur-md p-4 shadow-lg"
+        className="grid gap-3 border-2 border-[#594A54] bg-[#3D323A]/80 p-4 shadow-[4px_4px_0_0_#594A54] backdrop-blur-md sm:p-6"
       >
         <input
           type="text"
@@ -109,15 +107,12 @@ const AddGame = () => {
         />
 
         {error && (
-          <p className="rounded-lg border border-red-400/40 bg-red-400/10 p-3 text-red-200">
+          <p role="alert" className={errorClasses}>
             {error}
           </p>
         )}
 
-        <button
-          disabled={saving}
-          className="rounded-lg bg-[#63C7BE] p-3 font-semibold text-[#241E22] transition hover:bg-[#7AD8D0] disabled:cursor-not-allowed disabled:opacity-60"
-        >
+        <button disabled={saving} className={primaryButtonClasses}>
           {saving ? 'Guardando…' : isEditing ? 'Guardar cambios' : 'Añadir partida'}
         </button>
       </form>

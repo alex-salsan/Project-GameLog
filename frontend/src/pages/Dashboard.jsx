@@ -54,20 +54,20 @@ const Dashboard = () => {
       {loading && <p className="text-[#BEB4BB]">Cargando partidas…</p>}
 
       {error && (
-        <p className="mb-4 rounded-lg border border-red-400/40 bg-red-400/10 p-3 text-red-200">
+        <p className="mb-4 border-2 border-red-400/60 bg-red-400/10 p-3 text-red-200">
           {error}
         </p>
       )}
 
       {!loading && !error && games.length === 0 && (
-        <div className="rounded-2xl border border-[#594A54] bg-[#3D323A]/80 backdrop-blur-md p-10 text-center">
+        <div className="border-2 border-[#594A54] bg-[#3D323A]/80 p-10 text-center shadow-[4px_4px_0_0_#594A54] backdrop-blur-md">
           <p className="text-lg font-medium">Aún no has registrado ninguna partida</p>
           <p className="mt-2 text-[#BEB4BB]">
             Empieza tu biblioteca añadiendo el primer juego.
           </p>
           <Link
             to="/dashboard/add"
-            className="mt-6 inline-block rounded-lg bg-[#63C7BE] px-5 py-3 font-semibold text-[#241E22] transition hover:bg-[#7AD8D0]"
+            className="mt-6 inline-block border-2 border-[#63C7BE] bg-[#63C7BE] px-5 py-3 font-bold uppercase tracking-wider text-[#241E22] shadow-[4px_4px_0_0_#99E1D9] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0_0_#99E1D9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#99E1D9] focus-visible:ring-offset-2 focus-visible:ring-offset-[#3D323A]"
           >
             Añadir la primera
           </Link>

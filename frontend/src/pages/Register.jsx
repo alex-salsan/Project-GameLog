@@ -3,9 +3,12 @@ import { useNavigate, Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import api from '../services/api'
 import AuthLayout from '../components/AuthLayout/AuthLayout'
-
-const inputClasses =
-  'w-full rounded-lg border border-[#665560] bg-[#4B3D46] p-3 text-[#F5F1F3] placeholder:text-[#BEB4BB] outline-none focus:border-[#63C7BE] focus:ring-2 focus:ring-[#63C7BE]/30'
+import {
+  inputClasses,
+  labelClasses,
+  primaryButtonClasses,
+  errorClasses,
+} from '../styles/ui'
 
 const Register = () => {
   const [username, setUsername] = useState('')
@@ -33,7 +36,7 @@ const Register = () => {
     <AuthLayout title="Crear cuenta">
       <form onSubmit={handleSubmit} className="grid gap-4">
         <div>
-          <label htmlFor="username" className="mb-1 block text-sm text-[#BEB4BB]">
+          <label htmlFor="username" className={labelClasses}>
             Usuario
           </label>
           <input
@@ -48,7 +51,7 @@ const Register = () => {
         </div>
 
         <div>
-          <label htmlFor="password" className="mb-1 block text-sm text-[#BEB4BB]">
+          <label htmlFor="password" className={labelClasses}>
             Contraseña
           </label>
           <input
@@ -63,24 +66,18 @@ const Register = () => {
         </div>
 
         {error && (
-          <p
-            role="alert"
-            className="rounded-lg border border-red-400/40 bg-red-400/10 p-3 text-sm text-red-200"
-          >
+          <p role="alert" className={errorClasses}>
             {error}
           </p>
         )}
 
-        <button
-          disabled={loading}
-          className="rounded-lg bg-[#63C7BE] p-3 font-semibold text-[#241E22] transition hover:bg-[#7AD8D0] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#99E1D9] focus-visible:ring-offset-2 focus-visible:ring-offset-[#3D323A] disabled:cursor-not-allowed disabled:opacity-60"
-        >
+        <button disabled={loading} className={primaryButtonClasses}>
           {loading ? 'Creando cuenta…' : 'Registrarse'}
         </button>
 
         <p className="text-center text-sm text-[#BEB4BB]">
           ¿Ya tienes cuenta?{' '}
-          <Link to="/login" className="font-medium text-[#99E1D9] hover:underline">
+          <Link to="/login" className="font-bold text-[#99E1D9] hover:underline">
             Inicia sesión
           </Link>
         </p>

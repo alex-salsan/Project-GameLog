@@ -21,7 +21,7 @@ const GameCard = ({ game, index = 0, onDelete, onEdit }) => {
       animate={{ opacity: 1, y: 0, transition: { delay: index * 0.05 } }}
       exit={{ opacity: 0, scale: 0.9 }}
       whileHover={{ y: -4 }}
-      className="flex flex-col justify-between rounded-2xl border border-[#594A54] bg-[#3D323A]/80 p-5 shadow-lg backdrop-blur-md transition-shadow hover:shadow-xl hover:shadow-black/30"
+      className="flex flex-col justify-between rounded-none border-2 border-[#594A54] bg-[#3D323A]/80 p-5 shadow-[4px_4px_0_0_#594A54] backdrop-blur-md transition-shadow hover:border-[#63C7BE] hover:shadow-[6px_6px_0_0_#63C7BE]"
     >
       <div>
         <div className="flex items-start justify-between gap-3">
@@ -29,7 +29,7 @@ const GameCard = ({ game, index = 0, onDelete, onEdit }) => {
             {game.name}
           </h3>
           <span
-            className={`shrink-0 rounded-lg border px-3 py-1 font-pixel text-[16px] ${getRatingStyle(game.rating)}`}
+            className={`shrink-0 border-2 px-3 py-1 font-pixel text-[16px] ${getRatingStyle(game.rating)}`}
           >
             {game.rating}
           </span>
@@ -42,16 +42,16 @@ const GameCard = ({ game, index = 0, onDelete, onEdit }) => {
         )}
       </div>
 
-      <div className="mt-5 flex gap-2 border-t border-[#594A54] pt-4">
+      <div className="mt-5 flex gap-2 border-t-2 border-[#594A54] pt-4">
         <button
           onClick={() => onEdit(game)}
-          className="rounded-lg px-3 py-1.5 text-sm font-medium text-[#99E1D9] transition hover:bg-[#63C7BE]/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63C7BE]"
+          className="border-2 border-transparent px-3 py-1.5 text-sm font-bold uppercase tracking-wider text-[#99E1D9] transition hover:border-[#63C7BE] hover:bg-[#63C7BE]/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63C7BE]"
         >
           Editar
         </button>
         <button
           onClick={() => onDelete(game.id)}
-          className="rounded-lg px-3 py-1.5 text-sm font-medium text-red-300 transition hover:bg-red-400/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300"
+          className="border-2 border-transparent px-3 py-1.5 text-sm font-bold uppercase tracking-wider text-red-300 transition hover:border-red-300 hover:bg-red-400/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300"
         >
           Borrar
         </button>
