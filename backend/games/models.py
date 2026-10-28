@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Game(models.Model):
-  user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='game')
+  user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='games')
   name = models.CharField(max_length=200)
   played_at = models.DateTimeField()
   rating = models.DecimalField(

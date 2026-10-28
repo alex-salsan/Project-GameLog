@@ -1,37 +1,15 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-  Outlet,
-} from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 
+import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
-import AddGame from './pages/AddGame'
+import GameForm from './pages/GameForm'
 import Community from './pages/Community'
 import NotFound from './pages/NotFound'
-import Navbar from './components/Navbar/Navbar'
-import Background from './components/Background/Background'
-
-const PrivateRoute = () => {
-  const token = localStorage.getItem('access')
-  return token ? <Outlet /> : <Navigate to="/login" replace />
-}
-
-const AppLayout = () => {
-  return (
-    <div className="relative min-h-screen bg-[#241E22] text-[#F5F1F3]">
-      <Background />
-      <div className="relative z-10">
-        <Navbar />
-        <Outlet />
-      </div>
-    </div>
-  )
-}
+import AppLayout from './layouts/AppLayout'
+import PrivateRoute from './routes/PrivateRoute'
 
 const App = () => {
   return (
@@ -42,9 +20,9 @@ const App = () => {
         toastOptions={{
           duration: 3000,
           style: {
-            background: '#3D323A',
-            color: '#F5F1F3',
-            border: '1px solid #594A54',
+            background: 'var(--color-surface)',
+            color: 'var(--color-ink)',
+            border: '1px solid var(--color-line)',
           },
           success: {
             iconTheme: { primary: '#63C7BE', secondary: '#241E22' },
@@ -56,14 +34,15 @@ const App = () => {
       />
 
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
         <Route element={<PrivateRoute />}>
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/dashboard/add" element={<AddGame />} />
-            <Route path="/dashboard/edit/:id" element={<AddGame />} />
+            <Route path="/dashboard/add" element={<GameForm />} />
+            <Route path="/dashboard/edit/:id" element={<GameForm />} />
             <Route path="/community" element={<Community />} />
           </Route>
         </Route>

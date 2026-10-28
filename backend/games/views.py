@@ -1,13 +1,6 @@
-from rest_framework import viewsets, generics, permissions
-from django.contrib.auth.models import User
+from rest_framework import viewsets, permissions
 from .models import Game
-from .serializers import GameSerializer, RegisterSerializer
-
-
-class RegisterView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = RegisterSerializer
-    permission_classes = [permissions.AllowAny]
+from .serializers import GameSerializer
 
 
 class GameViewSet(viewsets.ModelViewSet):

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import api from '../services/api'
-import AuthLayout from '../components/AuthLayout/AuthLayout'
+import AuthLayout from '../layouts/AuthLayout'
 import {
   inputClasses,
   labelClasses,
@@ -75,9 +75,9 @@ const Register = () => {
           {loading ? 'Creando cuenta…' : 'Registrarse'}
         </button>
 
-        <p className="text-center text-sm text-[#BEB4BB]">
+        <p className="text-center text-sm text-muted">
           ¿Ya tienes cuenta?{' '}
-          <Link to="/login" className="font-bold text-[#99E1D9] hover:underline">
+          <Link to="/login" className="font-bold text-accent-soft hover:underline">
             Inicia sesión
           </Link>
         </p>

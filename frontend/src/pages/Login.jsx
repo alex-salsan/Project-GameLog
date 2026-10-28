@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../services/api'
-import AuthLayout from '../components/AuthLayout/AuthLayout'
+import { saveTokens } from '../services/auth'
+import AuthLayout from '../layouts/AuthLayout'
 import {
   inputClasses,
   labelClasses,
@@ -22,8 +23,7 @@ const Login = () => {
     setLoading(true)
     try {
       const res = await api.post('/login/', { username, password })
-      localStorage.setItem('access', res.data.access)
-      localStorage.setItem('refresh', res.data.refresh)
+      saveTokens(res.data)
       navigate('/dashboard')
     } catch {
       setError('Usuario o contraseña incorrectos.')
@@ -75,9 +75,9 @@ const Login = () => {
           {loading ? 'Entrando…' : 'Entrar'}
         </button>
 
-        <p className="text-center text-sm text-[#BEB4BB]">
+        <p className="text-center text-sm text-muted">
           ¿No tienes cuenta?{' '}
-          <Link to="/register" className="font-bold text-[#99E1D9] hover:underline">
+          <Link to="/register" className="font-bold text-accent-soft hover:underline">
             Regístrate
           </Link>
         </p>

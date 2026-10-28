@@ -1,0 +1,11 @@
+# Sistema / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Variables de entorno (solo se suben los .env.example)
+.env
+.env.*
+!.env.example
