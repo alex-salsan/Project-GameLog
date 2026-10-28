@@ -1,20 +1,33 @@
 # GAME LOG
 
-Tu diario de videojuegos: registra los juegos que has jugado, ponles nota del 0 al 10 y escribe tu reseña. Interfaz con estética retro pixel-art.
+Tu diario de videojuegos: registra los juegos que has jugado, ponles nota del 0 al 10 y escribe tu reseña. Aplicación Full-Stack con frontend en React y API REST en Django, con una interfaz de estética retro pixel-art.
 
 **Demo:** [pixel-gamelog.vercel.app](https://pixel-gamelog.vercel.app/)
 
-<!-- Añade una captura en docs/screenshot.png y descomenta:
-![Game Log](docs/screenshot.png)
--->
+> La API está en el plan gratuito de Render, que la pone en reposo cuando no se usa: la primera petición puede tardar unos segundos en responder.
+
+![Biblioteca de partidas](docs/screenshots/biblioteca.webp)
+
+<table>
+  <tr>
+    <td><img src="docs/screenshots/inicio.webp" alt="Página de inicio" /></td>
+    <td><img src="docs/screenshots/formulario.webp" alt="Formulario para editar una partida" /></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/login.webp" alt="Inicio de sesión" /></td>
+    <td align="center"><img src="docs/screenshots/movil.webp" alt="Biblioteca en móvil" width="220" /></td>
+  </tr>
+</table>
 
 ## Funcionalidades
 
 - Registro e inicio de sesión con JWT (access + refresh token con renovación automática).
 - CRUD de partidas: nombre, fecha en que se jugó, nota (0-10) y reseña.
 - Cada usuario solo puede ver y modificar sus propias partidas.
+- Notas con color según la puntuación: verde, ámbar o rojo.
 - Rutas privadas en el frontend, página 404 y notificaciones.
 - Fondo animado en canvas con sprites que reaccionan al ratón (respeta `prefers-reduced-motion`).
+- Diseño responsive para escritorio y móvil.
 
 ## Stack
 
@@ -22,7 +35,14 @@ Tu diario de videojuegos: registra los juegos que has jugado, ponles nota del 0 
 | -------- | ----------- |
 | Backend  | Python, Django, Django REST Framework, Simple JWT, PostgreSQL / SQLite, WhiteNoise, Gunicorn |
 | Frontend | React, Vite, React Router, Tailwind CSS, Motion, Axios, React Hot Toast |
-| Deploy   | Vercel (frontend) |
+| Deploy   | Vercel (frontend) · Render (API) |
+
+## Detalles técnicos
+
+- **Renovación del token sin que el usuario lo note**: un interceptor de Axios detecta las respuestas `401`, pide un nuevo `access` token con el `refresh` y repite la petición original. Si varias peticiones caducan a la vez, todas esperan a la misma renovación en lugar de lanzar una cada una.
+- **Aislamiento de datos por usuario en el backend**: el `ViewSet` filtra siempre las partidas por `request.user` y asigna el usuario al crear, así que es imposible leer o modificar las de otro aunque se conozca su `id`.
+- **Tests de la API** que comprueban la autenticación y que un usuario no puede ver, editar ni borrar partidas ajenas.
+- **Configuración por variables de entorno** (`dj-database-url`, `python-dotenv`): el mismo código funciona en local con SQLite y en producción con PostgreSQL.
 
 ## Estructura
 
@@ -123,6 +143,21 @@ python manage.py test
 ```
 
 Cubren el registro, el login y que un usuario no pueda ver, editar ni borrar las partidas de otro.
+
+## Próximos pasos
+
+- Sección **Comunidad**: ver las reseñas públicas de otros jugadores.
+- Búsqueda y filtros en la biblioteca (por nota, fecha o nombre).
+
+## Autor
+
+Proyecto individual: diseño, frontend, backend, tests y despliegue.
+
+**Alejandro Salado Sánchez**, desarrollador Full-Stack
+
+- Portfolio: [URL_DEL_PORTFOLIO](URL_DEL_PORTFOLIO)
+- LinkedIn: [alejandro-salado](https://www.linkedin.com/in/alejandro-salado/)
+- GitHub: [alex-salsan](https://github.com/alex-salsan)
 
 ## Licencia
 
